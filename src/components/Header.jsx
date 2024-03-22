@@ -1,5 +1,12 @@
+import { useMemo } from 'react'
 
-function Header() {
+function Header({cart, setCart, removeFromCart, increaseQuantity, decreasedQuantit, clearCart}) {
+
+    //state derivado para el carrito o cart
+    const isEmpty = useMemo(() => cart.length === 0, [cart])
+    //calcular el valor a pagar
+    const pagoTotal = useMemo(() => cart.reduce((accumulator, currentValue) => accumulator + (currentValue.price*currentValue.quantity), 0), [cart])
+
   return (
     <header className="py-5 header">
         <div className="container-xl">
@@ -16,55 +23,72 @@ function Header() {
                         <img className="img-fluid" src="/img/carrito.png" alt="imagen carrito" />
 
                         <div id="carrito" className="bg-white p-3">
-                            <p className="text-center">El carrito esta vacio</p>
-                            <table className="w-100 table">
-                                <thead>
-                                    <tr>
-                                        <th>Imagen</th>
-                                        <th>Nombre</th>
-                                        <th>Precio</th>
-                                        <th>Cantidad</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <img className="img-fluid" src="/img/guitarra_02.jpg" alt="imagen guitarra" />
-                                        </td>
-                                        <td>SRV</td>
-                                        <td className="fw-bold">
-                                                $299
-                                        </td>
-                                        <td className="flex align-items-start gap-4">
-                                            <button
-                                                type="button"
-                                                className="btn btn-dark"
-                                            >
-                                                -
-                                            </button>
-                                                1
-                                            <button
-                                                type="button"
-                                                className="btn btn-dark"
-                                            >
-                                                +
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button
-                                                className="btn btn-danger"
-                                                type="button"
-                                            >
-                                                X
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <p className="text-end">Total pagar: <span className="fw-bold">$899</span></p>
-                            <button className="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>
+                            { isEmpty ? (
+                                <p className="text-center">El carrito esta vacio</p>
+                            ) : (
+                                <>
+                                    <p className="text-center">Listado de Compras</p>
+                                    <table className="w-100 table">
+                                        <thead>
+                                            <tr>
+                                                <th>Imagen</th>
+                                                <th>Nombre</th>
+                                                <th>Precio</th>
+                                                <th>Cantidad</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {cart.map(guitarra => (
+                                                <tr key={guitarra.id}>
+                                                    <td>
+                                                        <img className="img-fluid" src={`/img/${guitarra.image}.jpg`} alt="imagen guitarra" />
+                                                    </td>
+                                                    <td>{guitarra.name}</td>
+                                                    <td className="fw-bold">
+                                                        ${guitarra.price}
+                                                    </td>
+                                                    <td className="flex align-items-start gap-4">
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-dark"
+                                                            onClick={() => decreasedQuantit(guitarra.id)}
+                                                        >
+                                                            -
+                                                        </button>
+                                                        {guitarra.quantity}
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-dark"
+                                                            onClick={() => increaseQuantity(guitarra.id)}
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <button
+                                                            className="btn btn-danger"
+                                                            type="button"
+                                                            onClick={() => removeFromCart(guitarra.id)}
+                                                        >
+                                                            X
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            
+                                        </tbody>
+                                    </table>
+                                    <p className="text-end">Total pagar: <span className="fw-bold">${pagoTotal}</span></p>
+                                    
+                                </>
+                            )}
+                            <button
+                                className="btn btn-dark w-100 mt-3 p-2"
+                                onClick={clearCart}
+                            >
+                                Vaciar Carrito
+                            </button>
                         </div>
                     </div>
                 </nav>

@@ -1,7 +1,13 @@
 
-function Guitar({guitarra}) {
+function Guitar({guitarra, addToCart}) {
 
     const { id, name, description, price, image } = guitarra
+
+    //funcion para agregar al carrito, una forma de hacer la funcionalidad 
+    // const handleClick = (guitarra) => {
+    //     //toma la copia de cart y agrega un nuevo elemento al carrito
+    //     setCart([...cart, guitarra])
+    // }
 
   return (
     <div className="col-md-6 col-lg-4 my-4 row align-items-center">
@@ -15,6 +21,7 @@ function Guitar({guitarra}) {
             <button 
                 type="button"
                 className="btn btn-dark w-100"
+                onClick={() => addToCart(guitarra)}
             >Agregar al Carrito</button>
         </div>
     </div>
